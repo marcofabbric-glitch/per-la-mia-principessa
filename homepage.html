@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Princess Glow - Complimenti Reali 👑💖</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Canvas Confetti CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Outfit:wght@600;800;900&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        princessBg: '#FFF0F5',
+                        princessPinkLight: '#FFC0CB',
+                        princessPinkMedium: '#FF69B4',
+                        princessPinkDeep: '#FF1493',
+                        roseGold: '#B8860B',
+                        roseGoldLight: '#E6C687',
+                        princessGold: '#FFD700'
+                    },
+                    fontFamily: {
+                        sans: ['Fredoka', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FFF0F5;
+            background-image: 
+                radial-gradient(#FFB6C1 1.5px, transparent 1.5px), 
+                radial-gradient(#FF69B4 1.5px, #FFF0F5 1.5px);
+            background-size: 28px 28px;
+            background-position: 0 0, 14px 14px;
+            font-family: 'Fredoka', sans-serif;
+            overflow-x: hidden;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Glassmorphism Royal Container */
+        .royal-card {
+            background: linear-gradient(160deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 228, 238, 0.94) 100%);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 3px solid #E6C687;
+            box-shadow: 0 12px 35px rgba(255, 20, 147, 0.25), 0 0 25px rgba(230, 198, 135, 0.4);
+        }
+
+        /* Large Princess Display Frame */
+        .portrait-frame {
+            border: 3px solid #FFD700;
+            box-shadow: 0 8px 25px rgba(255, 20, 147, 0.35), 0 0 20px rgba(255, 215, 0, 0.5);
+            background: linear-gradient(135deg, #FFB6C1 0%, #FF69B4 50%, #FF1493 100%);
+        }
+
+        /* Glowing Button */
+        .royal-gold-btn {
+            background: linear-gradient(135deg, #FF69B4 0%, #FF1493 50%, #D81B60 100%);
+            border: 3px solid #FFD700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 8px 25px rgba(255, 20, 147, 0.4);
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .royal-gold-btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.8);
+        }
+
+        /* Shimmering Pink Text Effect */
+        .shimmer-pink {
+            background: linear-gradient(90deg, #FF1493, #FF69B4, #C71585, #FF1493);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: shine 3s linear infinite;
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        /* Floating Animation */
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-5px) rotate(1deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        /* Floating Particle Canvas */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Smooth SVG transition */
+        #svg-container svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+            filter: drop-shadow(0px 8px 12px rgba(0,0,0,0.15));
+        }
+    </style>
+</head>
+<body class="min-h-[100dvh] text-pink-900 flex flex-col items-center justify-between p-3 sm:p-5 relative">
+
+    <!-- Background Canvas for Floating Glitter -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- Main Smartphone Viewport Wrapper -->
+    <main class="w-full max-w-sm my-auto relative z-10 flex flex-col items-center gap-3">
+
+        <!-- Back Button to Homepage -->
+        <div class="w-full flex justify-start">
+            <a href="index.html" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 border-2 border-pink-300 shadow-md text-pink-700 hover:text-pink-900 hover:bg-white text-xs font-bold transition active:scale-95">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>Indietro</span>
+            </a>
+        </div>
+
+        <!-- App Header Title -->
+        <header class="text-center animate-float">
+            <div class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-white/90 border-2 border-pink-300 shadow-sm mb-1">
+                <span class="text-[11px] font-extrabold text-pink-600 uppercase tracking-widest">👑 Princess Glow 👑</span>
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-black tracking-tight shimmer-pink drop-shadow-xs">
+                SPECIALE OGNI GIORNO
+            </h1>
+        </header>
+
+        <!-- Main Card Container -->
+        <div class="w-full royal-card rounded-3xl p-4 sm:p-5 relative text-center flex flex-col items-center justify-between shadow-2xl">
+            
+            <!-- LARGE PRINCESS VECTOR ILLUSTRATION DISPLAY -->
+            <div class="w-full relative group">
+                <div id="portrait-container" class="w-full h-64 sm:h-72 rounded-2xl overflow-hidden portrait-frame relative flex items-center justify-center p-2">
+                    
+                    <!-- Dynamic SVG Vector Container -->
+                    <div id="svg-container" class="w-full h-full flex items-center justify-center relative z-10 transition-transform duration-300 transform scale-100">
+                        <!-- SVG dynamically inserted here -->
+                    </div>
+                    
+                    <!-- Gradient Overlay for text contrast -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-pink-950/70 via-transparent to-transparent z-20 pointer-events-none"></div>
+
+                    <!-- Princess Name Badge -->
+                    <div id="princess-badge" class="absolute bottom-2.5 left-1/2 transform -translate-x-1/2 z-30 bg-gradient-to-r from-pink-500 via-rose-500 to-pink-600 text-white text-xs font-black px-4 py-1 rounded-full border-2 border-amber-300 shadow-lg tracking-wider uppercase whitespace-nowrap">
+                        Principessa
+                    </div>
+                </div>
+            </div>
+
+            <!-- COMPLIMENTS DISPLAY BOX -->
+            <div class="w-full my-3.5 min-h-[90px] flex items-center justify-center px-1">
+                <p id="compliment-text" class="text-base sm:text-lg font-bold text-pink-900 leading-snug transition-all duration-300">
+                    ...
+                </p>
+            </div>
+
+            <!-- Copy/Share Action Button -->
+            <button onclick="shareCompliment()" class="bg-white/80 hover:bg-white text-pink-700 text-xs font-extrabold py-2 px-4 rounded-full border-2 border-pink-300 flex items-center gap-2 shadow-xs active:scale-95 transition">
+                <i class="fa-solid fa-heart text-pink-500"></i> Salva / Copia Frase
+            </button>
+        </div>
+
+        <!-- BIG TOUCH-FRIENDLY ACTION BUTTON -->
+        <button id="generate-btn" onclick="generateNewCompliment()" class="w-full py-4 px-6 rounded-2xl royal-gold-btn text-white font-extrabold text-lg flex items-center justify-center gap-2 shadow-xl active:scale-95 transition tracking-wide">
+            <span id="btn-text">Un altro? 👑</span>
+        </button>
+
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-pink-950 text-pink-100 px-6 py-3 rounded-full text-xs font-bold shadow-2xl opacity-0 pointer-events-none transition-opacity duration-300 z-50 flex items-center gap-2 border-2 border-yellow-400">
+        <i class="fa-solid fa-sparkles text-yellow-300 text-sm"></i> <span id="toast-msg">Frase copiata negli appunti! 💖</span>
+    </div>
+
+    <script>
+        // Web Audio API for fairy magical chime sound effects
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new AudioContext();
+            }
+        }
+
+        function playMagicSound() {
+            try {
+                initAudio();
+                if (audioCtx && audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const now = audioCtx.currentTime;
+                const freqs = [523.25, 659.25, 783.99, 987.77, 1046.50, 1318.51];
+                
+                freqs.forEach((f, idx) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(f, now + idx * 0.04);
+                    
+                    gain.gain.setValueAtTime(0.1, now + idx * 0.04);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.04 + 0.3);
+                    
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    
+                    osc.start(now + idx * 0.04);
+                    osc.stop(now + idx * 0.04 + 0.3);
+                });
+            } catch (e) {
+                // Audio fallback silence
+            }
+        }
+
+        // 100% RELIABLE INLINE SVG VECTOR PORTRAITS FOR ALL 10 PRINCESSES
+        const PrincessData = [
+            {
+                name: "Biancaneve",
+                bgGradient: "linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #fef08a 100%)",
+                svg: `<svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="100" cy="120" r="95" fill="#2563eb" opacity="0.3"/>
+                    <!-- Hair -->
+                    <path d="M 50 110 C 40 60, 160 60, 150 110 C 165 140, 160 170, 140 170 C 120 170, 130 130, 100 130 C 70 130, 80 170, 60 170 C 40 170, 35 140, 50 110 Z" fill="#1e1b4b"/>
+                    <!-- Bow -->
+                    <path d="M 80 50 C 90 35, 100 45, 100 50 C 100 45, 110 35, 120 50 C 110 65, 100 55, 100 50 C 100 55, 90 65, 80 50 Z" fill="#dc2626"/>
+                    <circle cx="100" cy="50" r="5" fill="#991b1b"/>
+                    <!-- Face -->
+                    <ellipse cx="100" cy="115" rx="38" ry="45" fill="#fde047" opacity="0.2"/>
+                    <ellipse cx="100" cy="115" rx="35" ry="42" fill="#fff1f2"/>
+                    <!-- Cheeks -->
+                    <circle cx="82" cy="125" r="8" fill="#f43f5e" opacity="0.35"/>
+                    <circle cx="118" cy="125" r="8" fill="#f43f5e" opacity="0.35"/>
+                    <!-- Eyes -->
+                    <ellipse cx="85" cy="110" rx="4" ry="6" fill="#1e293b"/>
+                    <ellipse cx="115" cy="110" rx="4" ry="6" fill="#1e293b"/>
+                    <circle cx="86" cy="108" r="1.5" fill="#ffffff"/>
+                    <circle cx="116" cy="108" r="1.5" fill="#ffffff"/>
+                    <path d="M 80 101 Q 85 98 90 101" stroke="#0f172a" stroke-width="2" fill="none"/>
+                    <path d="M 110 101 Q 115 98 120 101" stroke="#0f172a" stroke-width="2" fill="none"/>
+                    <!-- Lips -->
+                    <path d="M 93 135 Q 100 142 107 135 Q 100 138 93 135 Z" fill="#e11d48"/>
+                    <!-- Dress collar -->
+                    <path d="M 65 155 Q 100 175 135 155 L 145 220 L 55 220 Z" fill="#2563eb"/>
+                    <path d="M 65 155 C 50 120, 150 120, 135 155 Z" fill="#ffffff" opacity="0.9"/>
+                    <!-- Red Apple -->
+                    <circle cx="100" cy="190" r="18" fill="#dc2626"/>
+                    <path d="M 100 172 Q 105 165 108 168" stroke="#78350f" stroke-width="2" fill="none"/>
+                    <path d="M 102 170 Q 110 168 112 173 Z" fill="#16a34a"/>
+                </svg>`,
+                compliments: [
+                    "Nemmeno la dolcezza leggendaria di Biancaneve può competere con la luce sincera del tuo sorriso!",
+                    "La grazia spontanea con cui illumini ogni stanza farebbe rimanere incantata Biancaneve in persona.",
+                    "Hai un cuore così limpido e generoso che Biancaneve ti cederebbe subito la corona della fiaba!",
+                    "Non ti serve alcuna mela magica: il tuo fascino naturale è così radioso che Biancaneve ne rimarrebbe meravigliata!"
+                ]
+            },
+            {
+                name: "Cenerentola",
+                bgGradient: "linear-gradient(135deg, #0284c7 0%, #38bdf8 50%, #e0f2fe 100%)",
+                svg: `<svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="100" cy="120" r="95" fill="#38bdf8" opacity="0.3"/>
+                    <!-- Hair bun -->
+                    <circle cx="100" cy="60" r="32" fill="#facc15"/>
+                    <path d="M 70 85 C 60 120, 140 120, 130 85 C 150 70, 50 70, 70 85 Z" fill="#eab308"/>
+                    <!-- Headband -->
+                    <path d="M 70 70 Q 100 55 130 70" stroke="#0284c7" stroke-width="6" fill="none"/>
+                    <!-- Face -->
+                    <ellipse cx="100" cy="115" rx="34" ry="40" fill="#fff1f2"/>
+                    <!-- Cheeks -->
+                    <circle cx="82" cy="122" r="7" fill="#fb7185" opacity="0.4"/>
+                    <circle cx="118" cy="122" r="7" fill="#fb7185" opacity="0.4"/>
+                    <!-- Eyes -->
+                    <ellipse cx="85" cy="108" rx="4" ry="5.5" fill="#0284c7"/>
+                    <ellipse cx="115" cy="108" rx="4" ry="5.5" fill="#0284c7"/>
+                    <circle cx="86" cy="106" r="1.5" fill="#ffffff"/>
+                    <circle cx="116" cy="106" r="1.5" fill="#ffffff"/>
+                    <path d="M 80 100 Q 85 97 90 100" stroke="#0369a1" stroke-width="2" fill="none"/>
+                    <path d="M 110 100 Q 115 97 120 100" stroke="#0369a1" stroke-width="2" fill="none"/>
+                    <!-- Lips -->
+                    <path d="M 94 132 Q 100 138 106 132 Q 100 135 94 132 Z" fill="#f43f5e"/>
+                    <!-- Black Choker -->
+                    <path d="M 80 152 Q 100 157 120 152" stroke="#0f172a" stroke-width="4" fill="none"/>
+                    <!-- Dress -->
+                    <path d="M 65 165 Q 100 180 135 165 L 155 230 L 45 230 Z" fill="#38bdf8"/>
+                    <path d="M 60 165 C 45 180, 70 210, 80 175 Z" fill="#ffffff" opacity="0.8"/>
+                    <path d="M 140 165 C 155 180, 130 210, 120 175 Z" fill="#ffffff" opacity="0.8"/>
+                    <!-- Glass Slipper icon -->
+                    <path d="M 90 205 Q 100 195 110 205 Q 105 215 90 205 Z" fill="#e0f2fe" stroke="#38bdf8" stroke-width="2"/>
+                </svg>`,
+                compliments: [
+                    "Cenerentola ha dovuto attendere la Fata Madrina, ma la tua eleganza brilla senza bisogno di incantesimi!",
+                    "Nessuna scarpetta di cristallo potra mai eguagliare la classe spontanea che fai vedere ogni giorno a Cenerentola!",
+                    "La scarpetta calzerebbe solo a te, perché Cenerentola sa benissimo che la vera regina di stile sei tu!",
+                    "I sogni son desideri, e la tua sola presenza porta la stessa magia che Cenerentola ha sempre cantato!"
+                ]
+            },
+            {
+                name: "Aurora",
+                bgGradient: "linear-gradient(135deg, #db2777 0%, #f472b6 50%, #fbcfe8 100%)",
+                svg: `<svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="100" cy="120" r="95" fill="#f472b6" opacity="0.3"/>
+                    <!-- Long Golden Hair -->
+                    <path d="M 40 90 C 30 160, 60 220, 75 220 C 90 220, 70 140, 100 130 C 130 140, 110 220, 125 220 C 140 220, 170 160, 160 90 C 170 40, 30 40, 40 90 Z" fill="#facc15"/>
+                    <!-- Tiara -->
+                    <path d="M 80 65 L 100 45 L 120 65 L 110 70 L 100 60 L 90 70 Z" fill="#eab308" stroke="#ca8a04" stroke-width="1"/>
+                    <!-- Face -->
+                    <ellipse cx="100" cy="115" rx="33" ry="39" fill="#fff1f2"/>
+                    <!-- Cheeks -->
+                    <circle cx="83" cy="122" r="7" fill="#f43f5e" opacity="0.35"/>
+                    <circle cx="117" cy="122" r="7" fill="#f43f5e" opacity="0.35"/>
+                    <!-- Eyes -->
+                    <ellipse cx="85" cy="108" rx="4" ry="5.5" fill="#15803d"/>
+                    <ellipse cx="115" cy="108" rx="4" ry="5.5" fill="#15803d"/>
+                    <circle cx="86" cy="106" r="1.5" fill="#ffffff"/>
+                    <circle cx="116" cy="106" r="1.5" fill="#ffffff"/>
+                    <path d="M 80 100 Q 85 97 90 100" stroke="#854d0e" stroke-width="2" fill="none"/>
+                    <path d="M 110 100 Q 115 97 120 100" stroke="#854d0e" stroke-width="2" fill="none"/>
+                    <!-- Lips -->
+                    <path d="M 94 132 Q 100 138 106 132 Q 100 135 94 132 Z" fill="#e11d48"/>
+                    <!-- Pink Dress -->
+                    <path d="M 65 160 Q 100 175 135 160 L 150 230 L 50 230 Z" fill="#ec4899"/>
+                    <path d="M 65 160 L 100 180 L 135 160 L 100 152 Z" fill="#ffffff" opacity="0.9"/>
+                </svg>`,
+                compliments: [
+                    "Aurora ha dormito un secolo intero, ma basta un tuo singolo sguardo per risvegliare la gioia in chiunque!",
+                    "I doni delle tre fate ad Aurora non raggiungono la splendida combinazione di bellezza e acume che possiedi tu!",
+                    "La grazia regale della Bella Addormentata Aurora impallidisce di fronte alla tua classe naturale!",
+                    "Cammini con un portamento così nobile che la principessa Aurora ti chiederebbe subito consigli di stile!"
+                ]
+            },
+            {
+                name: "Ariel",
+                bgGradient: "linear-gradient(135deg, #0d9488 0%, #2dd4bf 50%, #f43f5e 100%)",
+                svg: `<svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="100" cy="120" r="95" fill="#2dd4bf" opacity="0.3"/>
+                    <!-- Big Flowing Red Hair -->
+                    <path d="M 30 100 C 10 30, 190 30, 170 100 C 185 160, 150 210, 130 210 C 110 210, 135 150, 100 140 C 65 150, 80 210, 60 200 C 40 190, 20 150, 30 100 Z" fill="#dc2626"/>
+                    <path d="M 50 60 C 90 20, 150 50, 130 80 C 100 60, 70 80, 50 60 Z" fill="#ef4444"/>
+                    <!-- Face -->
+                    <ellipse cx="100" cy="115" rx="33" ry="38" fill="#fff1f2"/>
+                    <!-- Cheeks -->
+                    <circle cx="83" cy="122" r="7" fill="#fb7185" opacity="0.4"/>
+                    <circle cx="117" cy="122" r="7" fill="#fb7185" opacity="0.4"/>
+                    <!-- Eyes -->
+                    <ellipse cx="85" cy="108" rx="4" ry="5.5" fill="#0d9488"/>
+                    <ellipse cx="115" cy="108" rx="4" ry="5.5" fill="#0d9488"/>
+                    <circle cx="86" cy="106" r="1.5" fill="#ffffff"/>
+                    <circle cx="116" cy="106" r="1.5" fill="#ffffff"/>
+                    <path d="M 80 100 Q 85 97 90 100" stroke="#991b1b" stroke-width="2" fill="none"/>
+                    <path d="M 110 100 Q 115 97 120 100" stroke="#991b1b" stroke-width="2" fill="none"/>
+                    <!-- Lips -->
+                    <path d="M 94 131 Q 100 137 106 131 Q 100 134 94 131 Z" fill="#e11d48"/>
+                    <!-- Purple Shell Top / Mermaid -->
+                    <circle cx="82" cy="170" r="16" fill="#7e22ce"/>
+                    <circle cx="118" cy="170" r="16" fill="#7e22ce"/>
+                    <path d="M 70 190 Q 100 205 130 190 L 140 230 L 60 230 Z" fill="#0d9488"/>
+                    <!-- Starfish in Hair -->
+                    <polygon points="140,70 143,78 151,78 145,83 147,91 140,86 133,91 135,83 129,78 137,78" fill="#facc15"/>
+                </svg>`,
+                compliments: [
+                    "Ariel ha esplorato tutti gli abissi degli oceani, ma non ha mai trovato un tesoro prezioso quanto te!",
+                    "La tua vivacità travolgente e la curiosità nei tuoi occhi farebbero rimanere la sirenetta Ariel senza parole!",
+                    "La tua risata ha una melodia così bella che il canto leggendario di Ariel sembra solo un'eco al confronto!",
+                    "Nessun regno marino incantato racchiude la solare bellezza che Ariel cercherebbe in tutto il mondo!"
+                ]
+            },
+            {
+                name: "Belle",
+                bgGradient: "linear-gradient(135deg, #ca8a04 0%, #facc15 50%, #fef08a 100%)",
+                svg: `<svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="100" cy="120" r="95" fill="#facc15" opacity="0.3"/>
+                    <!-- Brown Hair with Half-Bun -->
+                    <circle cx="100" cy="65" r="25" fill="#78350f"/>
+                    <path d="M 50 100 C 40 150, 60 190, 70 200 C 80 150, 70 110, 100 110 C 130 110, 120 150, 130 200 C 140 190, 160 150, 150 100 C 160 60, 40 60, 50 100 Z" fill="#854d0e"/>
+                    <circle cx="100" cy="62" r="8" fill="#eab308"/>
+                    <!-- Face -->
+                    <ellipse cx="100" cy="115" rx="33" ry="38" fill="#fff1f2"/>
+                    <!-- Cheeks -->
+                    <circle cx="83" cy="122" r="7" fill="#fb7185" opacity="0.35"/>
+                    <circle cx="117" cy="122" r="7" fill="#fb7185" opacity="0.35"/>
+                    <!-- Eyes -->
+                    <ellipse cx="85" cy="108" rx="4" ry="5.5" fill="#78350f"/>
+                    <ellipse cx="115" cy="108" rx="4" ry="5.5" fill="#78350f"/>
+                    <circle cx="86" cy="106" r="1.5" fill="#ffffff"/>
+                    <circle cx="116" cy="106" r="1.5" fill="#ffffff"/>
+                    <path d="M 80 100 Q 85 97 90 100" stroke="#451a03" stroke-width="2" fill="none"/>
+                    <path d="M 110 100 Q 115 97 120 100" stroke="#451a03" stroke-width="2" fill="none"/>
+                    <!-- Lips -->
+                    <path d="M 94 132 Q 100 138 106 132 Q 100 135 94 132 Z" fill="#e11d48"/>
+                    <!-- Yellow Ballgown -->
+                    <path d="M 60 160 Q 100 175 140 160 L 155 230 L 45 230 Z" fill="#facc15"/>
+                    <path d="M 60 160 C 80 170, 120 170, 140 160 Q 100 190 60 160 Z" fill="#eab308"/>
+                    <!-- Enchanted Rose -->
+                    <path d="M 100 195 Q 103 185 100 180" stroke="#16a34a" stroke-width="2" fill="none"/>
+                    <circle cx="100" cy="178" r="6" fill="#dc2626"/>
+                </svg>`,
+                compliments: [
+                    "Persino la mente brillante e sognatrice di Belle rimarrebbe rapita dalla tua intelligenza e dalla tua bellezza!",
+                    "Non esiste libro con una storia ricca di fascino quanto quella che scrivi tu ogni giorno, superando Belle!",
+                    "Hai quel tipo di bellezza profonda e autentica che la principessa Belle ha sempre insegnato ad ammirare!",
+                    "Rendi magico tutto ciò che fai con la stessa grazia ed eleganza per cui Belle è famosa nel suo castello!"
+                ]
+            },
+            {
+                name: "Jasmine",
+                bgGradient: "linear-gradient(135deg, #0d9488 0%, #06b6d4 50%, #fef08a 100%)",
+                svg: `<svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="100" cy="120" r="95" fill="#06b6d4" opacity="0.3"/>
+                    <!-- Voluminous Black Hair -->
+                    <circle cx="100" cy="110" r="55" fill="#0f172a"/>
+                    <path d="M 50 120 C 30 180, 70 230, 100 230 C 130 230, 170 180, 150 120 Z" fill="#020617"/>
+                    <!-- Gold Headband with Blue Jewel -->
+                    <path d="M 65 75 Q 100 60 135 75" stroke="#eab308" stroke-width="6" fill="none"/>
+                    <ellipse cx="100" cy="67" rx="6" ry="8" fill="#0284c7"/>
+                    <!-- Face -->
+                    <ellipse cx="100" cy="115" rx="32" ry="37" fill="#fde68a" opacity="0.8"/>
+                    <ellipse cx="100" cy="115" rx="31" ry="36" fill="#fef3c7"/>
+                    <!-- Big Earrings -->
+                    <polygon points="56,120 44,140 60,140" fill="#eab308"/>
+                    <polygon points="144,120 156,140 140,140" fill="#eab308"/>
+                    <!-- Eyes -->
+                    <ellipse cx="84" cy="108" rx="5" ry="6" fill="#0f172a"/>
+                    <ellipse cx="116" cy="108" rx="5" ry="6" fill="#0f172a"/>
+                    <circle cx="85" cy="106" r="1.5" fill="#ffffff"/>
+                    <circle cx="117" cy="106" r="1.5" fill="#ffffff"/>
+                    <path d="M 77 98 Q 84 94 91 98" stroke="#020617" stroke-width="2.5" fill="none"/>
+                    <path d="M 109 98 Q 116 94 123 98" stroke="#020617" stroke-width="2.5" fill="none"/>
+                    <!-- Lips -->
+                    <path d="M 93 133 Q 100 140 107 133 Q 100 136 93 133 Z" fill="#b91c1c"/>
+                    <!-- Turquoise Outfit -->
+                    <path d="M 65 160 Q 100 175 135 160 L 145 220 L 55 220 Z" fill="#0d9488"/>
+                    <path d="M 80 160 Q 100 170 120 160" stroke="#eab308" stroke-width="4" fill="none"/>
+                </svg>`,
+                compliments: [
+                    "Il Genio della lampada potrebbe esaudire qualsiasi desiderio, ma Jasmine sa bene che nessuna è speciale come te!",
+                    "La fierezza e il carisma travolgente di Jasmine impallidiscono di fronte alla determinazione irresistibile che mostri tu!",
+                    "Non esiste tappeto volante capace di volare in alto quanto la sicurezza e la bellezza regale che condividi con Jasmine!",
+                    "Sei fiera e magnetica esattamente come la principessa Jasmine: un incanto unico dal primo istante!"
+                ]
+            },
+            {
+                name: "Pocahontas",
+                bgGradient: "linear-gradient(135deg, #b45309 0%, #f59e0b 50%, #fef08a 100%)",
+                svg: `<svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="100" cy="120" r="95" fill="#f59e0b" opacity="0.3"/>
+                    <!-- Long Straight Jet Black Hair -->
+                    <path d="M 45 90 C 35 150, 40 230, 60 230 C 80 230, 75 130, 100 130 C 125 130, 120 230, 140 230 C 160 230, 165 150, 155 90 C 165 40, 35 40, 45 90 Z" fill="#0f172a"/>
+                    <!-- Face -->
+                    <ellipse cx="100" cy="112" rx="31" ry="37" fill="#fde68a"/>
+                    <!-- Cheeks -->
+                    <circle cx="83" cy="120" r="6" fill="#d97706" opacity="0.3"/>
+                    <circle cx="117" cy="120" r="6" fill="#d97706" opacity="0.3"/>
+                    <!-- Eyes -->
+                    <ellipse cx="84" cy="106" rx="4.5" ry="5" fill="#1e1b4b"/>
+                    <ellipse cx="116" cy="106" rx="4.5" ry="5" fill="#1e1b4b"/>
+                    <circle cx="85" cy="104" r="1.5" fill="#ffffff"/>
+                    <circle cx="117" cy="104" r="1.5" fill="#ffffff"/>
+                    <path d="M 78 98 Q 84 95 90 98" stroke="#0f172a" stroke-width="2" fill="none"/>
+                    <path d="M 110 98 Q 116 95 122 98" stroke="#0f172a" stroke-width="2" fill="none"/>
+                    <!-- Lips -->
+                    <path d="M 94 129 Q 100 135 106 129 Q 100 132 94 129 Z" fill="#b91c1c"/>
+                    <!-- Blue Tribal Necklace -->
+                    <path d="M 75 145 Q 100 162 125 145" stroke="#0284c7" stroke-width="5" fill="none"/>
+                    <circle cx="100" cy="156" r="5" fill="#38bdf8"/>
+                    <!-- Tan Dress -->
+                    <path d="M 65 160 L 135 148 L 145 220 L 55 220 Z" fill="#d97706"/>
+                </svg>`,
+                compliments: [
+                    "Dipingi i colori del vento con una forza d'animo e una grazia che la stessa Pocahontas ammirerebbe immensamente!",
+                    "Hai la stessa fierezza libera e radiosa di Pocahontas: forte, bellissima e autentica in ogni sfaccettatura!",
+                    "Il modo sincero e spontaneo con cui vivi le tue giornate risuona con la stessa armonia meravigliosa di Pocahontas!",
+                    "Cammini con una dignità così pura che la natura stessa di Pocahontas si inchinerebbe al tuo passaggio!"
+                ]
+            },
+            {
+                name: "Mulan",
+                bgGradient: "linear-gradient(135deg, #be123c 0%, #fb7185 50%, #fef08a 100%)",
+                svg: `<svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="100" cy="120" r="95" fill="#fb7185" opacity="0.3"/>
+                    <!-- Dark Hair in Neat Updo -->
+                    <circle cx="100" cy="62" r="24" fill="#0f172a"/>
+                    <path d="M 55 95 C 45 130, 155 130, 145 95 C 160 65, 40 65, 55 95 Z" fill="#1e293b"/>
+                    <circle cx="100" cy="55" r="7" fill="#dc2626"/>
+                    <!-- Face -->
+                    <ellipse cx="100" cy="115" rx="32" ry="37" fill="#fff1f2"/>
+                    <!-- Cheeks -->
+                    <circle cx="83" cy="122" r="7" fill="#f43f5e" opacity="0.35"/>
+                    <circle cx="117" cy="122" r="7" fill="#f43f5e" opacity="0.35"/>
+                    <!-- Eyes -->
+                    <ellipse cx="84" cy="108" rx="4.5" ry="5" fill="#0f172a"/>
+                    <ellipse cx="116" cy="108" rx="4.5" ry="5" fill="#0f172a"/>
+                    <circle cx="85" cy="106" r="1.5" fill="#ffffff"/>
+                    <circle cx="117" cy="106" r="1.5" fill="#ffffff"/>
+                    <path d="M 78 100 Q 84 96 90 100" stroke="#0f172a" stroke-width="2" fill="none"/>
+                    <path d="M 110 100 Q 116 96 122 100" stroke="#0f172a" stroke-width="2" fill="none"/>
+                    <!-- Lips -->
+                    <path d="M 94 132 Q 100 138 106 132 Q 100 135 94 132 Z" fill="#e11d48"/>
+                    <!-- Hanfu Outfit (Hanfu Pink / Green / Blue) -->
+                    <path d="M 65 158 Q 100 172 135 158 L 150 230 L 50 230 Z" fill="#be123c"/>
+                    <path d="M 65 158 L 100 190 L 135 158 L 100 150 Z" fill="#059669"/>
+                    <path d="M 80 158 L 100 180 L 120 158 L 100 150 Z" fill="#38bdf8"/>
+                    <!-- Cherry Blossom Petals -->
+                    <circle cx="145" cy="85" r="4" fill="#f43f5e" opacity="0.8"/>
+                    <circle cx="155" cy="100" r="3" fill="#f43f5e" opacity="0.8"/>
+                </svg>`,
+                compliments: [
+                    "La determinazione di Mulan impallidisce di fronte alla tua grinta quotidiana, unita a una bellezza unica!",
+                    "Il fiore che sboccia nelle avversità è il più raro di tutti, e tu risplendi con la stessa fierezza di Mulan!",
+                    "Onore alla tua incredibile grazia e forza: sei potente e meravigliosa esattamente come la principessa Mulan!",
+                    "Hai lo sguardo fiero di Mulan, unito a un fascino dolce e irresistibile che conquista chiunque!"
+                ]
+            },
+            {
+                name: "Tiana",
+                bgGradient: "linear-gradient(135deg, #15803d 0%, #4ade80 50%, #fef08a 100%)",
+                svg: `<svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="100" cy="120" r="95" fill="#4ade80" opacity="0.3"/>
+                    <!-- Elegant Dark Updo Bun -->
+                    <circle cx="100" cy="60" r="28" fill="#09090b"/>
+                    <path d="M 60 90 C 50 120, 150 120, 140 90 C 155 70, 45 70, 60 90 Z" fill="#18181b"/>
+                    <!-- Tiara -->
+                    <path d="M 82 66 L 100 48 L 118 66 L 110 70 L 100 60 L 90 70 Z" fill="#facc15" stroke="#ca8a04" stroke-width="1"/>
+                    <!-- Face -->
+                    <ellipse cx="100" cy="115" rx="32" ry="37" fill="#d97706" opacity="0.3"/>
+                    <ellipse cx="100" cy="115" rx="31" ry="36" fill="#fde68a"/>
+                    <!-- Cheeks -->
+                    <circle cx="83" cy="122" r="6.5" fill="#b45309" opacity="0.3"/>
+                    <circle cx="117" cy="122" r="6.5" fill="#b45309" opacity="0.3"/>
+                    <!-- Eyes -->
+                    <ellipse cx="84" cy="108" rx="4.5" ry="5.5" fill="#451a03"/>
+                    <ellipse cx="116" cy="108" rx="4.5" ry="5.5" fill="#451a03"/>
+                    <circle cx="85" cy="106" r="1.5" fill="#ffffff"/>
+                    <circle cx="117" cy="106" r="1.5" fill="#ffffff"/>
+                    <path d="M 78 100 Q 84 96 90 100" stroke="#27272a" stroke-width="2" fill="none"/>
+                    <path d="M 110 100 Q 116 96 122 100" stroke="#27272a" stroke-width="2" fill="none"/>
+                    <!-- Lips -->
+                    <path d="M 94 132 Q 100 138 106 132 Q 100 135 94 132 Z" fill="#991b1b"/>
+                    <!-- Green Lily Gown -->
+                    <path d="M 60 160 Q 100 175 140 160 L 155 230 L 45 230 Z" fill="#22c55e"/>
+                    <path d="M 70 160 L 100 200 L 130 160 Z" fill="#fef08a"/>
+                    <!-- Frog Prince icon -->
+                    <circle cx="150" cy="190" r="10" fill="#16a34a"/>
+                    <circle cx="146" cy="184" r="3" fill="#ffffff"/>
+                    <circle cx="154" cy="184" r="3" fill="#ffffff"/>
+                </svg>`,
+                compliments: [
+                    "L'ambizione, la classe e lo stile inconfondibile di Tiana trovano in te la loro versione più brillante!",
+                    "Non ti servono stelle cadenti per brillare: crei la tua magia personale con lo stesso talento travolgente di Tiana!",
+                    "Sei la prova che eleganza e grinta creano la combinazione meravigliosa che Tiana ha sempre rappresentato!",
+                    "Illumini ogni ambiente in cui entri con la stessa energia contagiosa, solare ed elegante di Tiana!"
+                ]
+            },
+            {
+                name: "Rapunzel",
+                bgGradient: "linear-gradient(135deg, #7e22ce 0%, #c084fc 50%, #fef08a 100%)",
+                svg: `<svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="100" cy="120" r="95" fill="#c084fc" opacity="0.3"/>
+                    <!-- Extra Long Golden Braided Hair with Flowers -->
+                    <path d="M 40 80 C 20 150, 40 230, 80 230 C 120 230, 110 150, 100 130 C 130 140, 180 150, 160 80 C 170 30, 30 30, 40 80 Z" fill="#facc15"/>
+                    <path d="M 60 160 C 70 190, 80 220, 100 220 C 110 220, 100 190, 90 160 Z" fill="#eab308"/>
+                    <!-- Flowers in hair -->
+                    <circle cx="55" cy="130" r="6" fill="#f43f5e"/>
+                    <circle cx="70" cy="170" r="7" fill="#38bdf8"/>
+                    <circle cx="85" cy="200" r="6" fill="#ec4899"/>
+                    <!-- Face -->
+                    <ellipse cx="100" cy="115" rx="33" ry="38" fill="#fff1f2"/>
+                    <!-- Cheeks & Cute Freckles -->
+                    <circle cx="83" cy="122" r="7" fill="#fb7185" opacity="0.35"/>
+                    <circle cx="117" cy="122" r="7" fill="#fb7185" opacity="0.35"/>
+                    <circle cx="95" cy="120" r="1" fill="#b45309"/>
+                    <circle cx="105" cy="120" r="1" fill="#b45309"/>
+                    <circle cx="100" cy="122" r="1" fill="#b45309"/>
+                    <!-- Big Green Eyes -->
+                    <ellipse cx="85" cy="108" rx="5" ry="6" fill="#16a34a"/>
+                    <ellipse cx="115" cy="108" rx="5" ry="6" fill="#16a34a"/>
+                    <circle cx="86" cy="106" r="1.5" fill="#ffffff"/>
+                    <circle cx="116" cy="106" r="1.5" fill="#ffffff"/>
+                    <path d="M 79 99 Q 85 96 91 99" stroke="#854d0e" stroke-width="2" fill="none"/>
+                    <path d="M 109 99 Q 115 96 121 99" stroke="#854d0e" stroke-width="2" fill="none"/>
+                    <!-- Lips -->
+                    <path d="M 94 132 Q 100 138 106 132 Q 100 135 94 132 Z" fill="#e11d48"/>
+                    <!-- Purple Dress -->
+                    <path d="M 65 160 Q 100 175 135 160 L 150 230 L 50 230 Z" fill="#a855f7"/>
+                    <path d="M 85 160 L 100 185 L 115 160 Z" fill="#f472b6"/>
+                    <!-- Floating Lantern Symbol -->
+                    <path d="M 145 160 L 160 155 L 160 175 L 145 180 Z" fill="#fef08a" opacity="0.9"/>
+                </svg>`,
+                compliments: [
+                    "Rapunzel illumina le sue lanterne, ma tu illumini spontaneamente ogni singola stanza in cui entri!",
+                    "Mille lanterne luminose nel cielo notturno non eguagliano lo splendore che Rapunzel vedrebbe nei tuoi occhi!",
+                    "Hai lo spirito vivace e la dolcezza contagiosa che rendono la principessa Rapunzel un'icona di bellezza!",
+                    "La tua energia è così solare da abbagliare chiunque ti sia vicino, superando persino la luce magica di Rapunzel!"
+                ]
+            }
+        ];
+
+        // Dynamic Button Texts
+        const ButtonTexts = [
+            "Un altro? 👑",
+            "Te ne meriti un altro! ✨",
+            "Ancora un po' di magia! 💕",
+            "Un altro boost per te! 🌸",
+            "Dai, un altro! 💖",
+            "Clicca qui, principessa! ✨",
+            "Vuoi sentirne un altro? 👸",
+            "Un altro complimento reale! ✨",
+            "Sei speciale, guarda qui! 💖",
+            "Te ne meriti infiniti! 🌟"
+        ];
+
+        let lastPrincessIndex = -1;
+        let lastComplimentIndex = -1;
+        let lastButtonIndex = -1;
+
+        // Generate a new compliment & Princess display
+        function generateNewCompliment() {
+            playMagicSound();
+
+            // Pick non-repeating princess
+            let princessIndex;
+            do {
+                princessIndex = Math.floor(Math.random() * PrincessData.length);
+            } while (princessIndex === lastPrincessIndex && PrincessData.length > 1);
+            lastPrincessIndex = princessIndex;
+
+            const selectedPrincess = PrincessData[princessIndex];
+
+            // Pick non-repeating compliment
+            let complimentIndex;
+            do {
+                complimentIndex = Math.floor(Math.random() * selectedPrincess.compliments.length);
+            } while (complimentIndex === lastComplimentIndex && selectedPrincess.compliments.length > 1);
+            lastComplimentIndex = complimentIndex;
+
+            // Pick non-repeating button text
+            let buttonIndex;
+            do {
+                buttonIndex = Math.floor(Math.random() * ButtonTexts.length);
+            } while (buttonIndex === lastButtonIndex && ButtonTexts.length > 1);
+            lastButtonIndex = buttonIndex;
+
+            const textEl = document.getElementById('compliment-text');
+            const svgContainer = document.getElementById('svg-container');
+            const portraitFrame = document.getElementById('portrait-container');
+            const badgeEl = document.getElementById('princess-badge');
+            const btnTextEl = document.getElementById('btn-text');
+            
+            // Fade & Scale transition out
+            textEl.style.opacity = '0';
+            svgContainer.style.transform = 'scale(0.85)';
+            svgContainer.style.opacity = '0';
+
+            setTimeout(() => {
+                // Update SVG, Text, Background & Badge
+                portraitFrame.style.background = selectedPrincess.bgGradient;
+                svgContainer.innerHTML = selectedPrincess.svg;
+                textEl.innerText = `"${selectedPrincess.compliments[complimentIndex]}"`;
+                badgeEl.innerText = `✨ ${selectedPrincess.name} ✨`;
+                btnTextEl.innerText = ButtonTexts[buttonIndex];
+
+                // Fade & Scale transition in
+                svgContainer.style.transform = 'scale(1)';
+                svgContainer.style.opacity = '1';
+                textEl.style.opacity = '1';
+            }, 180);
+
+            // Pink & Gold confetti explosion
+            confetti({
+                particleCount: 55,
+                spread: 85,
+                origin: { y: 0.7 },
+                colors: ['#FF69B4', '#FF1493', '#FFD700', '#FFFFFF', '#E6C687']
+            });
+        }
+
+        // Copy Compliment to Clipboard
+        function shareCompliment() {
+            const text = document.getElementById('compliment-text').innerText;
+            
+            const tempInput = document.createElement("textarea");
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+
+            showToast("Frase reale copiata negli appunti! 💖");
+        }
+
+        // Toast Helper
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-msg');
+            toastMsg.innerText = message;
+            toast.style.opacity = '1';
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+            }, 2400);
+        }
+
+        // Animated Background Canvas (Floating crowns, stars, hearts)
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        const particles = [];
+        const symbols = ['💖', '✨', '👑', '🌸', '⭐', '💕'];
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.size = Math.random() * 12 + 10;
+                this.speedY = -(Math.random() * 0.7 + 0.2);
+                this.symbol = symbols[Math.floor(Math.random() * symbols.length)];
+                this.opacity = Math.random() * 0.35 + 0.15;
+            }
+
+            update() {
+                this.y += this.speedY;
+                if (this.y < -20) {
+                    this.y = height + 20;
+                    this.x = Math.random() * width;
+                }
+            }
+
+            draw() {
+                ctx.globalAlpha = this.opacity;
+                ctx.font = `${this.size}px sans-serif`;
+                ctx.fillText(this.symbol, this.x, this.y);
+            }
+        }
+
+        for (let i = 0; i < 25; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+
+        window.onload = function() {
+            animateParticles();
+            generateNewCompliment(); // Initial compliment
+        };
+    </script>
+</body>
+</html>

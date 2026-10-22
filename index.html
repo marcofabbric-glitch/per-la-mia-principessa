@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Princess Glow - Homepage 👑💖</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Canvas Confetti CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Outfit:wght@600;800;900&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        princessBg: '#FFF0F5',
+                        princessPinkLight: '#FFC0CB',
+                        princessPinkMedium: '#FF69B4',
+                        princessPinkDeep: '#FF1493',
+                        roseGold: '#B8860B',
+                        roseGoldLight: '#E6C687',
+                        princessGold: '#FFD700'
+                    },
+                    fontFamily: {
+                        sans: ['Fredoka', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FFF0F5;
+            background-image: 
+                radial-gradient(#FFB6C1 1.5px, transparent 1.5px), 
+                radial-gradient(#FF69B4 1.5px, #FFF0F5 1.5px);
+            background-size: 28px 28px;
+            background-position: 0 0, 14px 14px;
+            font-family: 'Fredoka', sans-serif;
+            overflow-x: hidden;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Glassmorphism Royal Card */
+        .royal-card {
+            background: linear-gradient(160deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 228, 238, 0.94) 100%);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 3px solid #E6C687;
+            box-shadow: 0 12px 35px rgba(255, 20, 147, 0.22), 0 0 25px rgba(230, 198, 135, 0.35);
+        }
+
+        /* Number Rating Pill Buttons */
+        .rating-btn {
+            background: linear-gradient(135deg, #FFFFFF 0%, #FFE4E1 100%);
+            border: 2px solid #FFB6C1;
+            color: #C71585;
+            font-weight: 700;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 10px rgba(255, 105, 180, 0.15);
+        }
+
+        .rating-btn:active {
+            transform: scale(0.92);
+        }
+
+        .rating-btn-10 {
+            background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%);
+            border: 2px solid #FFD700;
+            color: #FFFFFF;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.6), 0 4px 12px rgba(255, 20, 147, 0.3);
+        }
+
+        /* Main Glowing Action Button */
+        .royal-gold-btn {
+            background: linear-gradient(135deg, #FF69B4 0%, #FF1493 50%, #D81B60 100%);
+            border: 3px solid #FFD700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 8px 25px rgba(255, 20, 147, 0.4);
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .royal-gold-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Shimmering Pink Text Effect */
+        .shimmer-pink {
+            background: linear-gradient(90deg, #FF1493, #FF69B4, #C71585, #FF1493);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: shine 3s linear infinite;
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        /* Floating Animation */
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-5px) rotate(1deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        /* Floating Particle Canvas */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body class="min-h-[100dvh] text-pink-900 flex flex-col items-center justify-between p-3 sm:p-5 relative">
+
+    <!-- Background Canvas for Floating Glitter -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- Main Smartphone Viewport Wrapper -->
+    <main class="w-full max-w-sm my-auto relative z-10 flex flex-col items-center gap-4">
+
+        <!-- App Header Title -->
+        <header class="text-center animate-float">
+            <div class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-white/90 border-2 border-pink-300 shadow-sm mb-1">
+                <span class="text-[11px] font-extrabold text-pink-600 uppercase tracking-widest">👑 Princess Glow 👑</span>
+            </div>
+            <!-- DYNAMIC GREETING WITH RANDOM NICKNAME -->
+            <h1 id="greeting-title" class="text-2xl sm:text-3xl font-black tracking-tight shimmer-pink drop-shadow-xs capitalize">
+                Ciao principessa mia! 💖
+            </h1>
+        </header>
+
+        <!-- Main Interactive Glass Card -->
+        <div class="w-full royal-card rounded-3xl p-5 relative text-center flex flex-col items-center shadow-2xl">
+            
+            <!-- SECTION 1: QUESTION & RATING BUTTONS (Shown initially) -->
+            <div id="step-question" class="w-full flex flex-col items-center transition-all duration-300">
+                
+                <div class="w-16 h-16 rounded-full bg-pink-100 border-2 border-amber-300 flex items-center justify-center mb-3 shadow-inner text-2xl">
+                    👑
+                </div>
+
+                <h2 class="text-lg sm:text-xl font-bold text-pink-950 mb-1">
+                    Quanto ti senti bella oggi?
+                </h2>
+                <p class="text-xs text-pink-600 font-medium mb-5">
+                    Scegli un punteggio da 0 a 10 ✨
+                </p>
+
+                <!-- Rating Grid (0 to 10) -->
+                <div class="grid grid-cols-4 gap-2 w-full mb-2">
+                    <button onclick="selectRating(0)" class="rating-btn py-2.5 rounded-xl text-base">0</button>
+                    <button onclick="selectRating(1)" class="rating-btn py-2.5 rounded-xl text-base">1</button>
+                    <button onclick="selectRating(2)" class="rating-btn py-2.5 rounded-xl text-base">2</button>
+                    <button onclick="selectRating(3)" class="rating-btn py-2.5 rounded-xl text-base">3</button>
+                    <button onclick="selectRating(4)" class="rating-btn py-2.5 rounded-xl text-base">4</button>
+                    <button onclick="selectRating(5)" class="rating-btn py-2.5 rounded-xl text-base">5</button>
+                    <button onclick="selectRating(6)" class="rating-btn py-2.5 rounded-xl text-base">6</button>
+                    <button onclick="selectRating(7)" class="rating-btn py-2.5 rounded-xl text-base">7</button>
+                    <button onclick="selectRating(8)" class="rating-btn py-2.5 rounded-xl text-base">8</button>
+                    <button onclick="selectRating(9)" class="rating-btn py-2.5 rounded-xl text-base">9</button>
+                    <button onclick="selectRating(10)" class="rating-btn rating-btn-10 py-2.5 rounded-xl text-base col-span-2 font-black flex items-center justify-center gap-1">
+                        10 👑
+                    </button>
+                </div>
+            </div>
+
+            <!-- SECTION 2: FEEDBACK & NAVIGATION (Hidden by default, shown after vote) -->
+            <div id="step-feedback" class="w-full hidden flex-col items-center transition-all duration-300">
+                
+                <!-- Rating Display Badge -->
+                <div class="inline-flex items-center gap-1 px-4 py-1.5 rounded-full bg-pink-500 text-white font-black text-sm border-2 border-amber-300 shadow-md mb-3">
+                    <span id="badge-score">Voto: 10/10</span> ✨
+                </div>
+
+                <!-- Feedback Comment Box -->
+                <div class="w-full my-2 p-4 bg-white/80 rounded-2xl border-2 border-pink-200 min-h-[90px] flex items-center justify-center shadow-inner">
+                    <p id="feedback-comment" class="text-base sm:text-lg font-bold text-pink-900 leading-snug">
+                        ...
+                    </p>
+                </div>
+
+                <!-- Action Options -->
+                <div class="w-full flex flex-col gap-2.5 mt-4">
+                    <!-- Forward to Compliments Page -->
+                    <a href="homepage.html" class="w-full py-3.5 px-4 rounded-2xl royal-gold-btn text-white font-extrabold text-sm sm:text-base flex items-center justify-center gap-2 shadow-lg tracking-wide">
+                        <span>Ricevi i tuoi complimenti reali</span>
+                        <i class="fa-solid fa-crown text-amber-300"></i>
+                    </a>
+
+                    <!-- Go Back & Change Vote -->
+                    <button onclick="resetRating()" class="w-full py-2.5 px-4 rounded-2xl bg-white/80 hover:bg-white text-pink-700 font-bold text-xs border-2 border-pink-300 flex items-center justify-center gap-1.5 shadow-xs active:scale-95 transition">
+                        <i class="fa-solid fa-rotate-left text-pink-500"></i>
+                        <span>Cambia voto</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        // Nicknames List
+        const Nicknames = [
+            "bella",
+            "bellissima",
+            "vì",
+            "vita",
+            "meraviglia",
+            "principessa",
+            "principessa mia"
+        ];
+
+        // Progressive Feedback Comments (0 to 10)
+        const RatingComments = {
+            0: "Ma sei impazzita?! 😱 Zero non esiste nemmeno nel tuo dizionario regale! Sali subito!",
+            1: "Uno?! Ma dai, stiamo scherzando? Meritiamo decisamente di più di così! 🤨💖",
+            2: "Nemmeno per sogno! Guarda che la tua bellezza vale almeno mille volte tanto! ✨",
+            3: "Troppo poco, fidati di me! Hai un fascino unico, sù con quel voto! 🌸",
+            4: "Mmm no, non ci siamo ancora! Sei molto più carina di così, fai la brava! 💕",
+            5: "Dai su che ci facciamo con questo 5... Dai che sei la più bella di tuttte!",
+            6: "Sufficiente? Ma quale sufficiente, una regina non si accontenta mai del 5! 👑",
+            7: "Sette è carino, ma sappiamo entrambi che la tua bellezza è da primo posto! 💖",
+            8: "Ci stiamo avvicinando... ma il tuo livello reale è ancora più in alto! 👑✨",
+            9: "Quasi perfetto! Ma perché fermarsi a 9 quando il 10 è la tua vera casa? 👑💖",
+            10: "ESATTO! 10000 PUNTI AURA! Sei letteralmente la perfezione assoluta, principessa! 👑💥💖✨"
+        };
+
+        // Web Audio API for fairy magical chimes
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new AudioContext();
+            }
+        }
+
+        function playMagicChime(isTen) {
+            try {
+                initAudio();
+                if (audioCtx && audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const now = audioCtx.currentTime;
+                const freqs = isTen 
+                    ? [523.25, 659.25, 783.99, 987.77, 1046.50, 1318.51, 1567.98]
+                    : [440, 554.37, 659.25];
+                
+                freqs.forEach((f, idx) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(f, now + idx * 0.05);
+                    
+                    gain.gain.setValueAtTime(0.12, now + idx * 0.05);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.05 + 0.35);
+                    
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    
+                    osc.start(now + idx * 0.05);
+                    osc.stop(now + idx * 0.05 + 0.35);
+                });
+            } catch (e) {}
+        }
+
+        // Set Random Greeting Nickname on page load/refresh
+        function setRandomGreeting() {
+            const nickname = Nicknames[Math.floor(Math.random() * Nicknames.length)];
+            const greetingEl = document.getElementById('greeting-title');
+            greetingEl.innerText = `Ciao ${nickname}! 💖`;
+        }
+
+        // Handle Rating Selection
+        function selectRating(score) {
+            playMagicChime(score === 10);
+
+            const questionStep = document.getElementById('step-question');
+            const feedbackStep = document.getElementById('step-feedback');
+            const badgeScore = document.getElementById('badge-score');
+            const commentText = document.getElementById('feedback-comment');
+
+            badgeScore.innerText = `Voto: ${score}/10`;
+            commentText.innerText = RatingComments[score];
+
+            questionStep.classList.add('hidden');
+            feedbackStep.classList.remove('hidden');
+
+            if (score === 10) {
+                confetti({
+                    particleCount: 70,
+                    spread: 90,
+                    origin: { y: 0.65 },
+                    colors: ['#FF69B4', '#FF1493', '#FFD700', '#FFFFFF', '#E6C687']
+                });
+            }
+        }
+
+        // Reset Rating / Change Vote
+        function resetRating() {
+            const questionStep = document.getElementById('step-question');
+            const feedbackStep = document.getElementById('step-feedback');
+
+            feedbackStep.classList.add('hidden');
+            questionStep.classList.remove('hidden');
+        }
+
+        // Animated Background Canvas
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        const particles = [];
+        const symbols = ['💖', '✨', '👑', '🌸', '⭐', '💕'];
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.size = Math.random() * 12 + 10;
+                this.speedY = -(Math.random() * 0.7 + 0.2);
+                this.symbol = symbols[Math.floor(Math.random() * symbols.length)];
+                this.opacity = Math.random() * 0.35 + 0.15;
+            }
+
+            update() {
+                this.y += this.speedY;
+                if (this.y < -20) {
+                    this.y = height + 20;
+                    this.x = Math.random() * width;
+                }
+            }
+
+            draw() {
+                ctx.globalAlpha = this.opacity;
+                ctx.font = `${this.size}px sans-serif`;
+                ctx.fillText(this.symbol, this.x, this.y);
+            }
+        }
+
+        for (let i = 0; i < 25; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+
+        window.onload = function() {
+            setRandomGreeting();
+            animateParticles();
+        };
+    </script>
+</body>
+</html>
