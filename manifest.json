@@ -1,0 +1,15 @@
+{
+  "name": "Princess Glow",
+  "short_name": "Princess",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#FFF0F5",
+  "theme_color": "#FF69B4",
+  "icons": [
+    {
+      "src": "icona.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
