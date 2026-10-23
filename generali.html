@@ -298,17 +298,30 @@
             "Continua a brillare! 🌟"
         ];
 
-        let lastComplimentIndex = -1;
+        // Mappa volatile per tracciare quante volte è uscita ciascuna frase nella sessione corrente
+        const usageCounts = new Array(GeneralCompliments.length).fill(0);
         let lastButtonIndex = -1;
 
         function generateNewCompliment() {
             playMagicSound();
 
-            let complimentIndex;
-            do {
-                complimentIndex = Math.floor(Math.random() * GeneralCompliments.length);
-            } while (complimentIndex === lastComplimentIndex);
-            lastComplimentIndex = complimentIndex;
+            // Calcolo delle probabilità pesate (meno una frase è uscita, più ha probabilità di uscire)
+            const weights = usageCounts.map(count => 1 / (count + 1));
+            const totalWeight = weights.reduce((sum, w) => sum + w, 0);
+
+            let randomVal = Math.random() * totalWeight;
+            let complimentIndex = 0;
+
+            for (let i = 0; i < weights.length; i++) {
+                if (randomVal < weights[i]) {
+                    complimentIndex = i;
+                    break;
+                }
+                randomVal -= weights[i];
+            }
+
+            // Incrementa il conteggio per la frase estratta in questa sessione
+            usageCounts[complimentIndex]++;
 
             let buttonIndex;
             do {
