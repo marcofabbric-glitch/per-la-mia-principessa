@@ -742,21 +742,7 @@
     }
 ];
 
-// Dynamic Button Texts
-        const ButtonTexts = [
-            "Un altro? 👑",
-            "Te ne meriti un altro! ✨",
-            "Ancora un po' di magia! 💕",
-            "Un altro boost per te! 🌸",
-            "Dai, un altro! 💖",
-            "Clicca qui, principessa! ✨",
-            "Vuoi sentirne un altro? 👸",
-            "Un altro complimento reale! ✨",
-            "Sei speciale, guarda qui! 💖",
-            "Te ne meriti infiniti! 🌟"
-        ];
-
-        // Mappa volatile dei conteggi per le 10 Principesse
+// Mappa volatile dei conteggi per le 10 Principesse
         const princessCounts = new Array(PrincessData.length).fill(0);
 
         // Mappa volatile dei conteggi per ogni singola frase di ogni principessa
@@ -776,6 +762,20 @@
             }
             return 0;
         }
+
+        // Dynamic Button Texts
+        const ButtonTexts = [
+            "Un altro? 👑",
+            "Te ne meriti un altro! ✨",
+            "Ancora un po' di magia! 💕",
+            "Un altro boost per te! 🌸",
+            "Dai, un altro! 💖",
+            "Clicca qui, principessa! ✨",
+            "Vuoi sentirne un altro? 👸",
+            "Un altro complimento reale! ✨",
+            "Sei speciale, guarda qui! 💖",
+            "Te ne meriti infiniti! 🌟"
+        ];
 
         // Generate a new compliment & Princess display
         function generateNewCompliment() {
