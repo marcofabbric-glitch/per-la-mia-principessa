@@ -742,7 +742,7 @@
     }
 ];
 
-        // Dynamic Button Texts
+// Dynamic Button Texts
         const ButtonTexts = [
             "Un altro? 👑",
             "Te ne meriti un altro! ✨",
@@ -756,31 +756,42 @@
             "Te ne meriti infiniti! 🌟"
         ];
 
-        let lastPrincessIndex = -1;
-        let lastComplimentIndex = -1;
+        // Mappa volatile dei conteggi per le 10 Principesse
+        const princessCounts = new Array(PrincessData.length).fill(0);
+
+        // Mappa volatile dei conteggi per ogni singola frase di ogni principessa
+        const complimentCounts = PrincessData.map(p => new Array(p.compliments.length).fill(0));
+
         let lastButtonIndex = -1;
+
+        // Estrazione pesata probabilistica (Weighted Random)
+        function getWeightedIndex(counts) {
+            const weights = counts.map(count => 1 / (count + 1));
+            const totalWeight = weights.reduce((sum, w) => sum + w, 0);
+
+            let randomVal = Math.random() * totalWeight;
+            for (let i = 0; i < weights.length; i++) {
+                if (randomVal < weights[i]) return i;
+                randomVal -= weights[i];
+            }
+            return 0;
+        }
 
         // Generate a new compliment & Princess display
         function generateNewCompliment() {
             playMagicSound();
 
-            // Pick non-repeating princess
-            let princessIndex;
-            do {
-                princessIndex = Math.floor(Math.random() * PrincessData.length);
-            } while (princessIndex === lastPrincessIndex && PrincessData.length > 1);
-            lastPrincessIndex = princessIndex;
+            // 1. Estrazione pesata della Principessa (escono più spesso quelle viste meno)
+            const princessIndex = getWeightedIndex(princessCounts);
+            princessCounts[princessIndex]++;
 
             const selectedPrincess = PrincessData[princessIndex];
 
-            // Pick non-repeating compliment
-            let complimentIndex;
-            do {
-                complimentIndex = Math.floor(Math.random() * selectedPrincess.compliments.length);
-            } while (complimentIndex === lastComplimentIndex && selectedPrincess.compliments.length > 1);
-            lastComplimentIndex = complimentIndex;
+            // 2. Estrazione pesata della Frase per la principessa scelta
+            const complimentIndex = getWeightedIndex(complimentCounts[princessIndex]);
+            complimentCounts[princessIndex][complimentIndex]++;
 
-            // Pick non-repeating button text
+            // 3. Estrazione testo pulsante
             let buttonIndex;
             do {
                 buttonIndex = Math.floor(Math.random() * ButtonTexts.length);
@@ -820,7 +831,6 @@
                 colors: ['#FF69B4', '#FF1493', '#FFD700', '#FFFFFF', '#E6C687']
             });
         }
-
         // Copy Compliment to Clipboard
         function shareCompliment() {
             const text = document.getElementById('compliment-text').innerText;
