@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Princess Glow - Complimenti per Te 💖✨</title>
+
+    <!-- Icone PWA & Apple Touch Icon -->
+    <link rel="apple-touch-icon" href="icona.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icona.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icona.png">
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Canvas Confetti CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Outfit:wght@600;800;900&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        princessBg: '#FFF0F5',
+                        princessPinkLight: '#FFC0CB',
+                        princessPinkMedium: '#FF69B4',
+                        princessPinkDeep: '#FF1493',
+                        roseGold: '#B8860B',
+                        roseGoldLight: '#E6C687',
+                        princessGold: '#FFD700'
+                    },
+                    fontFamily: {
+                        sans: ['Fredoka', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FFF0F5;
+            background-image: 
+                radial-gradient(#FFB6C1 1.5px, transparent 1.5px), 
+                radial-gradient(#FF69B4 1.5px, #FFF0F5 1.5px);
+            background-size: 28px 28px;
+            background-position: 0 0, 14px 14px;
+            font-family: 'Fredoka', sans-serif;
+            overflow-x: hidden;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .royal-card {
+            background: linear-gradient(160deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 228, 238, 0.94) 100%);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 3px solid #E6C687;
+            box-shadow: 0 12px 35px rgba(255, 20, 147, 0.25), 0 0 25px rgba(230, 198, 135, 0.4);
+        }
+
+        .heart-icon-box {
+            border: 3px solid #FFD700;
+            box-shadow: 0 8px 25px rgba(255, 20, 147, 0.35);
+            background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%);
+        }
+
+        .royal-gold-btn {
+            background: linear-gradient(135deg, #FF69B4 0%, #FF1493 50%, #D81B60 100%);
+            border: 3px solid #FFD700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 8px 25px rgba(255, 20, 147, 0.4);
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .royal-gold-btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.8);
+        }
+
+        .shimmer-pink {
+            background: linear-gradient(90deg, #FF1493, #FF69B4, #C71585, #FF1493);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: shine 3s linear infinite;
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-5px) rotate(1deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body class="min-h-[100dvh] text-pink-900 flex flex-col items-center justify-between p-3 sm:p-5 relative">
+
+    <canvas id="particles-canvas"></canvas>
+
+    <main class="w-full max-w-sm my-auto relative z-10 flex flex-col items-center gap-3">
+
+        <!-- Pulsante Torna alla Home -->
+        <div class="w-full flex justify-start mb-1">
+            <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 border-2 border-pink-300 text-pink-700 font-bold text-xs shadow-md hover:bg-pink-100 transition active:scale-95">
+                <i class="fa-solid fa-house text-pink-500"></i> Torna alla Home
+            </a>
+        </div>
+
+        <header class="text-center animate-float">
+            <div class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-white/90 border-2 border-pink-300 shadow-sm mb-1">
+                <span class="text-[11px] font-extrabold text-pink-600 uppercase tracking-widest">💖 Special For You 💖</span>
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-black tracking-tight shimmer-pink drop-shadow-xs">
+                PENSIERI PER TE
+            </h1>
+        </header>
+
+        <div class="w-full royal-card rounded-3xl p-5 relative text-center flex flex-col items-center justify-between shadow-2xl">
+            
+            <div class="w-24 h-24 rounded-full heart-icon-box flex items-center justify-center my-2 animate-bounce">
+                <i class="fa-solid fa-heart text-white text-4xl drop-shadow-md"></i>
+            </div>
+
+            <div class="w-full my-4 min-h-[100px] flex items-center justify-center px-2">
+                <p id="compliment-text" class="text-lg sm:text-xl font-extrabold text-pink-900 leading-snug transition-all duration-300">
+                    ...
+                </p>
+            </div>
+
+            <button onclick="shareCompliment()" class="bg-white/80 hover:bg-white text-pink-700 text-xs font-extrabold py-2 px-4 rounded-full border-2 border-pink-300 flex items-center gap-2 shadow-xs active:scale-95 transition">
+                <i class="fa-solid fa-heart text-pink-500"></i> Salva / Copia Frase
+            </button>
+        </div>
+
+        <button id="generate-btn" onclick="generateNewCompliment()" class="w-full py-4 px-6 rounded-2xl royal-gold-btn text-white font-extrabold text-lg flex items-center justify-center gap-2 shadow-xl active:scale-95 transition tracking-wide">
+            <span id="btn-text">Un altro pensiero? ✨</span>
+        </button>
+
+    </main>
+
+    <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-pink-950 text-pink-100 px-6 py-3 rounded-full text-xs font-bold shadow-2xl opacity-0 pointer-events-none transition-opacity duration-300 z-50 flex items-center gap-2 border-2 border-yellow-400">
+        <i class="fa-solid fa-sparkles text-yellow-300 text-sm"></i> <span id="toast-msg">Frase copiata negli appunti! 💖</span>
+    </div>
+
+    <script>
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
+
+        function initAudio() {
+            if (!audioCtx) audioCtx = new AudioContext();
+        }
+
+        function playMagicSound() {
+            try {
+                initAudio();
+                if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+                const now = audioCtx.currentTime;
+                const freqs = [523.25, 659.25, 783.99, 987.77, 1046.50, 1318.51];
+                freqs.forEach((f, idx) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(f, now + idx * 0.04);
+                    gain.gain.setValueAtTime(0.1, now + idx * 0.04);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.04 + 0.3);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now + idx * 0.04);
+                    osc.stop(now + idx * 0.04 + 0.3);
+                });
+            } catch (e) {}
+        }
+
+        const GeneralCompliments = [
+            "Hai un sorriso che risolve letteralmente qualsiasi brutta giornata! ☀️💖",
+            "La tua presenza ha il superpotere di rendere tutto più bello e leggero. ✨",
+            "Sei la combinazione perfetta di dolcezza, intelligenza e stile unico! 💅🌸",
+            "Avere la possibilità di parlarti è sempre la parte migliore della giornata. 💕",
+            "Hai uno sguardo che incanta al primo istante senza bisogno di parole. ✨👑",
+            "Sei una di quelle rare persone che trasmettono vibrazioni positive al 100%! 🌈💖",
+            "Non c'è niente da fare: quando entri in stanza, l'aura sale a +100000! 💥👑",
+            "Hai un modo di fare così spontaneo ed elegante che lascia tutti a bocca aperta. 🌸✨",
+            "Sei incredibilmente bella, ma la cosa più bella è quanto sei vera e autentica. 💕",
+            "La tua risata è la cosa più contagiosa e bella che si possa ascoltare! 🎶💖",
+            "Ci sono 8 miliardi di persone al mondo, ma tu hai un'energia che non si può replicare. 🌟",
+            "Sei di un'eleganza raffinata che non ha bisogno di sforzi per farsi notare. 💅✨",
+            "Hai la capacità di fare sentire speciale chiunque ti stia vicino. 💖",
+            "Sei semplicemente spettacolare in ogni singola sfaccettatura! 👑🔥",
+            "Guardarti sorridere è una di quelle cose che non stancano mai! ☀️💕",
+            "Non smettere mai di essere esattamente come sei: sei perfetta così! ✨💖",
+            "Hai uno stile unico e una classe che fanno scuola! 💅👑",
+            "Sei la dimostrazione che le cose più preziose sono anche quelle più spontanee. 🌸✨",
+            "Il tuo outfit, il tuo sorriso, la tua energia: tutto da 10/10 senza discussioni! 🔥💖",
+            "Sei una stella luminosa e meriti solo il meglio che la vita possa offrire! 🌟👑"
+        ];
+
+        const ButtonTexts = [
+            "Un altro pensiero? ✨",
+            "Te ne meriti un altro! 💖",
+            "Un altro boost di dolcezza! 🌸",
+            "Clicca per farti sorridere! 💕",
+            "Un'altra frase speciale! 👑",
+            "Continua a brillare! 🌟"
+        ];
+
+        let lastComplimentIndex = -1;
+        let lastButtonIndex = -1;
+
+        function generateNewCompliment() {
+            playMagicSound();
+
+            let complimentIndex;
+            do {
+                complimentIndex = Math.floor(Math.random() * GeneralCompliments.length);
+            } while (complimentIndex === lastComplimentIndex);
+            lastComplimentIndex = complimentIndex;
+
+            let buttonIndex;
+            do {
+                buttonIndex = Math.floor(Math.random() * ButtonTexts.length);
+            } while (buttonIndex === lastButtonIndex);
+            lastButtonIndex = buttonIndex;
+
+            const textEl = document.getElementById('compliment-text');
+            const btnTextEl = document.getElementById('btn-text');
+            
+            textEl.style.opacity = '0';
+
+            setTimeout(() => {
+                textEl.innerText = `"${GeneralCompliments[complimentIndex]}"`;
+                btnTextEl.innerText = ButtonTexts[buttonIndex];
+                textEl.style.opacity = '1';
+            }, 180);
+
+            confetti({
+                particleCount: 50,
+                spread: 80,
+                origin: { y: 0.7 },
+                colors: ['#FF69B4', '#FF1493', '#FFD700', '#FFFFFF']
+            });
+        }
+
+        function shareCompliment() {
+            const text = document.getElementById('compliment-text').innerText;
+            const tempInput = document.createElement("textarea");
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+            showToast("Frase copiata negli appunti! 💖");
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-msg');
+            toastMsg.innerText = message;
+            toast.style.opacity = '1';
+            setTimeout(() => { toast.style.opacity = '0'; }, 2400);
+        }
+
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        const particles = [];
+        const symbols = ['💖', '✨', '🌸', '⭐', '💕'];
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.size = Math.random() * 12 + 10;
+                this.speedY = -(Math.random() * 0.7 + 0.2);
+                this.symbol = symbols[Math.floor(Math.random() * symbols.length)];
+                this.opacity = Math.random() * 0.35 + 0.15;
+            }
+            update() {
+                this.y += this.speedY;
+                if (this.y < -20) {
+                    this.y = height + 20;
+                    this.x = Math.random() * width;
+                }
+            }
+            draw() {
+                ctx.globalAlpha = this.opacity;
+                ctx.font = `${this.size}px sans-serif`;
+                ctx.fillText(this.symbol, this.x, this.y);
+            }
+        }
+
+        for (let i = 0; i < 25; i++) particles.push(new Particle());
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animateParticles);
+        }
+
+        window.onload = function() {
+            animateParticles();
+            generateNewCompliment();
+        };
+    </script>
+</body>
+</html>
